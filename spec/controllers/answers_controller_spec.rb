@@ -3,22 +3,24 @@ require 'rails_helper'
 RSpec.describe AnswersController, type: :request do
 
   context 'on addition' do
-    before do
-      get '/', params: {"q" => "613e2e30: what is 4 plus 3"}
-    end
+    context 'on two numbers' do
+      before do
+        get '/', params: {"q" => "613e2e30: what is 4 plus 3"}
+      end
 
-    it "succeeds" do
-      expect(response.body).to eql "7"
-    end
-  end
+      it "succeeds" do
+        expect(response.body).to eql "7"
+      end
 
-  context 'on addition' do
-    before do
-      get '/', params: {"q" => "5d861f20: which of the following numbers is the largest: 73, 178"}
-    end
+      context 'on three numbers' do
+        before do
+          get '/', params: {"q" => "613e2e30: what is 4 plus 3 plus 3"}
+        end
 
-    it "succeeds" do
-      expect(response.body).to eql "178"
+        it "succeeds" do
+          expect(response.body).to eql "10"
+        end
+      end
     end
   end
 
@@ -32,7 +34,7 @@ RSpec.describe AnswersController, type: :request do
     end
   end
 
-  context 'on addition' do
+  context 'on largest number' do
     before do
       get '/', params: {"q" => "5d861f20: which of the following numbers is the largest: 73, 178"}
     end
@@ -93,4 +95,13 @@ RSpec.describe AnswersController, type: :request do
     end
   end
   
+  context 'on fibonacci' do
+    before do
+      get '/', params: {"q" => "308a2e80: what is the 12th number in the Fibonacci sequence"}
+    end
+
+    it "succeeds" do
+      expect(response.body).to eql "144"
+    end
+  end
 end

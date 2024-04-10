@@ -20,14 +20,11 @@ class AnswersController < ApplicationController
   private
 
   def answer_question(question, arguments = nil)
-    check_addition = question.match /what is (\d+) plus (\d+)/
-    return answer_addition(check_addition) if check_addition
+    check_computation = question.match /what is \d+/
+    return answer_computation(question[8..]) if check_computation
 
-    check_multiplication = question.match /what is (\d+) multiplied by (\d+)/
-    return answer_multiplication(check_multiplication) if check_multiplication
-
-    check_substraction = question.match /what is (\d+) minus (\d+)/
-    return answer_substraction(check_substraction) if check_substraction
+    check_fibonacci = question.match /what is the (\d+).+ in the Fibonacci sequence/
+    return answer_fibonacci(check_fibonacci) if check_fibonacci
 
     check_largest = question.match /which of the following numbers is the largest/
     return answer_largest(arguments) if check_largest
@@ -45,16 +42,19 @@ class AnswersController < ApplicationController
     return answer_city(check_city) if check_city
   end
 
-  def answer_addition(match)
-    match[1].to_i + match[2].to_i
+  def answer_computation(computation)
+    eval(computation.gsub("plus", "+").gsub("minus", '-').gsub('multiplied by', '*').gsub('to the power of', '**'))
   end
 
-  def answer_substraction(match)
-    match[1].to_i - match[2].to_i
-  end
-
-  def answer_multiplication(match)
-    match[1].to_i * match[2].to_i
+  def answer_fibonacci(string_argument)
+    number = string_argument[1].to_i
+    result = [1, 1]
+    i = 0
+    until result.length >= number
+      result << result[i] + result[i+1]
+      i +=1
+    end
+    result[number-1]
   end
 
   def answer_largest(string_arguments)
