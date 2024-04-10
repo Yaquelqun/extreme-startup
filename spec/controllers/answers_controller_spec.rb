@@ -21,4 +21,14 @@ RSpec.describe AnswersController, type: :request do
       expect(response.body).to eql "178"
     end
   end
+
+  context 'on square/cube' do
+    before do
+      get '/', params: {"q" => "0b953bb0: which of the following numbers is both a square and a cube: 521, 121, 100, 417"}
+    end
+
+    it "succeeds" do
+      expect(response.body).to eql "121"
+    end
+  end
 end

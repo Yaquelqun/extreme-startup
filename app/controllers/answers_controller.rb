@@ -3,6 +3,7 @@ class AnswersController < ApplicationController
     question = params['q']
     id, formatted_question, params = question.split(':').map(&:strip)
     answer = answer_question(formatted_question, params)
+    puts answer.inspect
     render json: answer
   end
 
@@ -13,6 +14,9 @@ class AnswersController < ApplicationController
     return answer_addition(check_addition) if check_addition
     check_largest = question.match /which of the following numbers is the largest/
     return answer_largest(arguments) if check_largest
+
+    check_square_cube = question.match /which of the following numbers is both a square and a cube/
+    return answer_square_cube(arguments) if check_square_cube
   end
 
   def answer_addition(match)
@@ -22,5 +26,11 @@ class AnswersController < ApplicationController
   def answer_largest(string_arguments)
     array = string_arguments.split(', ').map(&:to_i)
     array.max
+  end
+
+  def answer_square_cube(string_arguments)
+    array = string_arguments.split(', ').map(&:to_i)
+
+    array.select { Math.cbrt(_1) % 1 == 0.0 && Math.sqrt(_1) % 1 == 0.0}
   end
 end
