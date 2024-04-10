@@ -22,13 +22,33 @@ RSpec.describe AnswersController, type: :request do
     end
   end
 
-  context 'on square/cube' do
+  context 'on multiplication' do
     before do
-      get '/', params: {"q" => "0b953bb0: which of the following numbers is both a square and a cube: 521, 121, 100, 417"}
+      get '/', params: {"q" => "fd461e10: what is 4 multiplied by 18"}
     end
 
     it "succeeds" do
-      expect(response.body).to eql "121"
+      expect(response.body).to eql "72"
+    end
+  end
+
+  context 'on addition' do
+    before do
+      get '/', params: {"q" => "5d861f20: which of the following numbers is the largest: 73, 178"}
+    end
+
+    it "succeeds" do
+      expect(response.body).to eql "178"
+    end
+  end
+
+  context 'on square/cube' do
+    before do
+      get '/', params: {"q" => "0b953bb0: which of the following numbers is both a square and a cube: 521, 64, 100, 417"}
+    end
+
+    it "succeeds" do
+      expect(response.body).to eql "64"
     end
   end
 end

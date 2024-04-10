@@ -12,6 +12,10 @@ class AnswersController < ApplicationController
   def answer_question(question, arguments = nil)
     check_addition = question.match /what is (\d+) plus (\d+)/
     return answer_addition(check_addition) if check_addition
+
+    check_multiplication = question.match /what is (\d+) multiplied by (\d+)/
+    return answer_multiplication(check_multiplication) if check_multiplication
+
     check_largest = question.match /which of the following numbers is the largest/
     return answer_largest(arguments) if check_largest
 
@@ -23,6 +27,10 @@ class AnswersController < ApplicationController
     match[1].to_i + match[2].to_i
   end
 
+  def answer_multiplication(match)
+    match[1].to_i * match[2].to_i
+  end
+
   def answer_largest(string_arguments)
     array = string_arguments.split(', ').map(&:to_i)
     array.max
@@ -31,6 +39,6 @@ class AnswersController < ApplicationController
   def answer_square_cube(string_arguments)
     array = string_arguments.split(', ').map(&:to_i)
 
-    array.select { Math.cbrt(_1) % 1 == 0.0 && Math.sqrt(_1) % 1 == 0.0}
+    array.detect { Math.cbrt(_1) % 1 == 0.0 && Math.sqrt(_1) % 1 == 0.0 }
   end
 end
