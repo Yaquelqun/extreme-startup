@@ -42,6 +42,17 @@ RSpec.describe AnswersController, type: :request do
     end
   end
 
+  context 'on substraction' do
+    before do
+      get '/', params: {"q"=>"e559d940: what is 0 minus 17"}
+
+    end
+
+    it "succeeds" do
+      expect(response.body).to eql "-17"
+    end
+  end
+
   context 'on square/cube' do
     before do
       get '/', params: {"q" => "0b953bb0: which of the following numbers is both a square and a cube: 521, 64, 100, 417"}

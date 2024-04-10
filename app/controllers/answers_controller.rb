@@ -1,4 +1,10 @@
 class AnswersController < ApplicationController
+  ACTOR_DICT = {
+    "James Bond" => {
+      "Dr No" => "Sean Connery"
+    }
+  }
+
   def show
     question = params['q']
     id, formatted_question, params = question.split(':').map(&:strip)
@@ -15,6 +21,9 @@ class AnswersController < ApplicationController
 
     check_multiplication = question.match /what is (\d+) multiplied by (\d+)/
     return answer_multiplication(check_multiplication) if check_multiplication
+
+    check_substraction = question.match /what is (\d+) minus (\d+)/
+    return answer_substraction(check_substraction) if check_substraction
 
     check_largest = question.match /which of the following numbers is the largest/
     return answer_largest(arguments) if check_largest
@@ -33,6 +42,10 @@ class AnswersController < ApplicationController
     match[1].to_i + match[2].to_i
   end
 
+  def answer_substraction(match)
+    match[1].to_i - match[2].to_i
+  end
+
   def answer_multiplication(match)
     match[1].to_i * match[2].to_i
   end
@@ -49,7 +62,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_prime_number(string_arguments)
-    # byebug if Rails.env == 'test'
     array = string_arguments.split(', ').map(&:to_i)
     array.detect do |input|
       unacceptable_divisors = (2..(input-1))
