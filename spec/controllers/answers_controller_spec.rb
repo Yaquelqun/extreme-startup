@@ -51,4 +51,25 @@ RSpec.describe AnswersController, type: :request do
       expect(response.body).to eql "64"
     end
   end
+
+  context 'on actor check' do
+    before do
+      get '/', params: {"q" => "0b953bb0: TODO"}
+    end
+
+    it "succeeds" do
+      expect(response.body).to eql nil
+    end
+  end
+
+  context 'on prime' do
+    before do
+      get '/', params: {"q" => "cb96ace0: which of the following numbers are primes: 7727, 157"}
+    end
+
+    it "succeeds" do
+      expect(response.body).to eql "7727"
+    end
+  end
+  
 end

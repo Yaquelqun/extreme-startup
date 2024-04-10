@@ -22,6 +22,9 @@ class AnswersController < ApplicationController
     check_square_cube = question.match /which of the following numbers is both a square and a cube/
     return answer_square_cube(arguments) if check_square_cube
 
+    check_prime_number = question.match /which of the following numbers are prime/
+    return answer_prime_number(arguments) if check_prime_number
+
     check_actor = question.match /who played (.+) in the film (.+)/
     return answer_actor(check_actor) if check_actor
   end
@@ -45,7 +48,16 @@ class AnswersController < ApplicationController
     array.detect { Math.cbrt(_1) % 1 == 0.0 && Math.sqrt(_1) % 1 == 0.0 }
   end
 
-  def anser_actor(match)
+  def answer_prime_number(string_arguments)
+    # byebug if Rails.env == 'test'
+    array = string_arguments.split(', ').map(&:to_i)
+    array.detect do |input|
+      unacceptable_divisors = (2..(input-1))
+      unacceptable_divisors.none? { |unacceptable_divisor| input % unacceptable_divisor == 0 }
+    end
+  end
+
+  def answer_actor(match)
     ACTOR_DICT.dig(match[1], match[2])
   end
 end
