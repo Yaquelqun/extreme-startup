@@ -5,6 +5,10 @@ class AnswersController < ApplicationController
     }
   }
 
+  CITY_DICT = {
+    "Eiffel tower" => "Paris"
+  }
+
   def show
     question = params['q']
     id, formatted_question, params = question.split(':').map(&:strip)
@@ -36,6 +40,9 @@ class AnswersController < ApplicationController
 
     check_actor = question.match /who played (.+) in the film (.+)/
     return answer_actor(check_actor) if check_actor
+
+    check_city = question.match /which city is the (.+) in/
+    return answer_city(check_city) if check_city
   end
 
   def answer_addition(match)
@@ -71,5 +78,9 @@ class AnswersController < ApplicationController
 
   def answer_actor(match)
     ACTOR_DICT.dig(match[1], match[2])
+  end
+
+  def answer_city(match)
+    CITY_DICT.dig(match[1])
   end
 end

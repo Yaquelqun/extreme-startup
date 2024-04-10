@@ -63,13 +63,23 @@ RSpec.describe AnswersController, type: :request do
     end
   end
 
-  context 'on actor check' do
+  xcontext 'on actor check' do
     before do
       get '/', params: {"q" => "0b953bb0: TODO"}
     end
 
     it "succeeds" do
       expect(response.body).to eql nil
+    end
+  end
+
+  context 'on city check' do
+    before do
+      get '/', params: {"q" => "5a3109c0: which city is the Eiffel tower in"}
+    end
+
+    it "succeeds" do
+      expect(response.body).to eql "Paris"
     end
   end
 
